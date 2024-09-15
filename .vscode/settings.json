@@ -1,0 +1,10 @@
+{
+  "python.analysis.typeCheckingMode": "strict",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "charliermarsh.ruff",
+  "editor.indentSize": 4,
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "simpleVim.normalModeCursorStyle": "block"
+}
