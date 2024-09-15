@@ -38,7 +38,11 @@ core_graphics = load_library(
 
 
 def send_message(ptr: objc_id, selector: str, *args: Any) -> objc_id:
-    return libobjc.objc_msgSend(ptr, libobjc.sel_registerName(selector.encode()), *args)
+    return libobjc.objc_msgSend(
+        ptr,
+        libobjc.sel_registerName(selector.encode()),
+        *args,
+    )
 
 
 NSString: objc_id = libobjc.objc_getClass(b"NSString")

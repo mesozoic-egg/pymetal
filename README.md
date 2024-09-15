@@ -55,3 +55,32 @@ metal.run(
 output = metal.copy_out(device_output_buffer)
 print((c_float * 1).from_address(output)[:]) # [3.0]
 ```
+
+
+## Under the hood
+The library uses ctypes to interface with the Obj-C runtime and Metal 
+Framework, by doing:
+```python
+libobjc = CDLL("/usr/lib/libobjc.dylib")
+metal = CDLL("/Library/Frameworks/Metal.framework/Metal")
+```
+
+The rest are standard ctypes stuff, for example:
+```python
+metal.MTLCreateSystemDefaultDevice.restype = objc_id
+metal.MTLCreateSystemDefaultDevice()
+```
+
+After obtaining a pointer to the Objective C instance, the method
+are invoked by calling the `objc_msgSend` function, passing in the
+pointer and selector:
+
+```python
+libobjc.objc_msgSend.restype = objc_id
+def send_message(ptr: objc_id, selector: str, *args: Any) -> objc_id:
+    return libobjc.objc_msgSend(
+        ptr,
+        libobjc.sel_registerName(selector.encode()),
+        *args,
+    )
+```
